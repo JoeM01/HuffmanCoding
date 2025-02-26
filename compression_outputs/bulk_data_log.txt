@@ -1,0 +1,44 @@
+
+========================================
+
+Results for bulk compress @ 2025-02-12 20:28:53.447698
+----------------------------------------
+
+HUFFMAN Compressor:
+Original Size: 152089
+Compressed Size: 87688
+Compression Ratio: 1.73
+Time Taken to Compress: 0.0175
+
+========================================
+
+Results for bulk compress @ 2025-02-12 20:29:09.095762
+----------------------------------------
+
+HUFFMAN Compressor:
+Original Size: 152089
+Compressed Size: 87688
+Compression Ratio: 1.73
+Time Taken to Compress: 0.0151
+Percentage Reduction: 42.34
+
+zlib Compressor:
+Original Size: 152089
+Compressed Size: 54404
+Compression Ratio: 2.80
+Time Taken to Compress: 0.0067
+Percentage Reduction: 64.23
+
+lzma Compressor:
+Original Size: 152089
+Compressed Size: 48492
+Compression Ratio: 3.14
+Time Taken to Compress: 0.0290
+Percentage Reduction: 68.12
+
+bz2 Compressor:
+Original Size: 152089
+Compressed Size: 43202
+Compression Ratio: 3.52
+Time Taken to Compress: 0.0078
+Percentage Reduction: 71.59
