@@ -79,7 +79,7 @@ input_file = "Datasets\\alice29.txt"
 file_name="compression_outputs\\compression_results.csv"
 #compressed_data = "compressed_output"
 #decompressed_data = "decompressed_output"
-results = bulkcompress(input_file)
+bulkcompress(input_file)
 #file = save_results_to_csv(results)
 
 vs.showgraph(file_name)
