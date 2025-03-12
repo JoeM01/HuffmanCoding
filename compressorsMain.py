@@ -58,8 +58,8 @@ def algorithm_compressor(input_file = None, compressed_File = None, decompressed
         if automated:
             #input file specified in main
             file_name = os.path.basename(input_file)
-            compressed_file = f"compression_outputs\\bz2_{file_name}_compressed.bin"
-            decompressed_file = f"compression_outputs\\bz2_{file_name}_decompressed.txt"
+            compressed_file = f"compression_outputs\\{algorithm}_{file_name}_compressed.bin"
+            decompressed_file = f"compression_outputs\\{algorithm}_{file_name}_decompressed.txt"
 
         compressed = algorithm_compress(input_file, compressed_file, algorithm)
         
