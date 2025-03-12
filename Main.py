@@ -29,7 +29,7 @@ def bulkcompress(input_file, runs = 2):
             try:
                 results[name] = compressor_func(input_file=input_file, automated=True, algorithm=name,)
             except TypeError:
-                results[namze] = compressor_func(input_file=input_file, automated=True,)
+                results[name] = compressor_func(input_file=input_file, automated=True,)
             print("-------------------------------")
                 #print(results) #debug to ensure results are stored properly
         save_results_to_csv(results)
