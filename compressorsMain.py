@@ -1,9 +1,12 @@
 import lzma
 import bz2
 import zlib
+import gzip
 import time
 import os
 import importlib
+
+
 
 
 

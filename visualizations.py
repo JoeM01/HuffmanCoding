@@ -20,6 +20,7 @@ def showgraph(filename):
     for compressor, row in compressor_avg.iterrows():
         plt.annotate(compressor, (row["compress_time"], row["percentage_reduction"]), fontsize=10, xytext=(5,5), textcoords="offset points")
     
+    print("from vis file below:")
     print(compressor_avg) #testing to see avg outputs
 
     plt.show() # if perm error, close csv file - stops from using.

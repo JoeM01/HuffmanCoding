@@ -15,10 +15,11 @@ def bulkcompress(input_file, runs = 2):
         #"ZLIB": zlibcompress.zlib_compressor,
         #"LZMA": lzmacompress.lzma_compressor,
         #"BZ2": bz2compress.bz2_compressor,
-        "HUFFMAN": huffmanFinal.huffman_compressor,
-        "zlib": compressorsMain.algorithm_compressor,
-        "lzma": compressorsMain.algorithm_compressor,
-        "bz2": compressorsMain.algorithm_compressor,
+        "HUFFMAN": huffmanFinal.huffman_compressor, #simple, basic huffman
+        "zlib": compressorsMain.algorithm_compressor, #LZ77/HUFFMAN(DEFLATE) 
+        "lzma": compressorsMain.algorithm_compressor, #LZ-Markov Chain
+        "bz2": compressorsMain.algorithm_compressor, #burrows wheeler, runlengthencode, movetofront, huffman
+        "gzip": compressorsMain.algorithm_compressor, # gzip, deflate
     }
 
     results = {}
@@ -74,12 +75,13 @@ def choosecompressor():
 
 
 #Runnables --
+if __name__ == "__main__":
+    
+    input_file = "Datasets\\alice29.txt"
+    file_name="compression_outputs\\compression_results.csv"
+    #compressed_data = "compressed_output"
+    #decompressed_data = "decompressed_output"
+    bulkcompress(input_file)
+    #file = save_results_to_csv(results)
 
-input_file = "Datasets\\alice29.txt"
-file_name="compression_outputs\\compression_results.csv"
-#compressed_data = "compressed_output"
-#decompressed_data = "decompressed_output"
-bulkcompress(input_file)
-#file = save_results_to_csv(results)
-
-vs.showgraph(file_name)
+    vs.showgraph(file_name)
