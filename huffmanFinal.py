@@ -114,13 +114,13 @@ def file_decompression(encoded_file, output_file, root):
 
     start_time = time.time()
     decoded_str = decode(encoded_str, root) #traverses huffman tree and pieces chars together
-    decode_time = time.time() - start_time
+    decompress_time = time.time() - start_time
 
     with open(output_file, 'wb') as file: #standard write 
         file.write(decoded_str)
 
      #print("Compressed binary string:", encoded_str) - DEBUG TEST
-    return decoded_str
+    return {'decompress_time':decompress_time}
 
 
 def huffman_compressor(input_file = None, compressed_File = None, decompressed_file = None, automated = False): #reworked so it can be called in other files using imports.
@@ -136,16 +136,19 @@ def huffman_compressor(input_file = None, compressed_File = None, decompressed_f
             decompressed_file = f"compression_outputs\huffman_{file_name}_decompressed.txt"
 
         root, compressed = file_compression(input_file, compressed_file) #root, compression filled from the returns in file_compression
+        decompressed = file_decompression(compressed_file, decompressed_file, root)
+
+        results = {**compressed, **decompressed}
 
         print(f"Original Size: {compressed['original_size']} bytes")
         print(f"Compressed Size: {compressed['compressed_size']} bytes")
         print(f"Compression Ratio: {compressed['compression_ratio']:.2f}")
         print(f"Time Taken to Compress: {compressed['compress_time']:.4f} seconds")
         print(f"Percentage Reduction: {compressed['percentage_reduction']:.2f}%")
+        print(f"Decompressed! Time taken:{decompressed['decompress_time']:.4f} seconds")
 
-        file_decompression(compressed_file, decompressed_file, root)
-        print("Decompression complete! Ensure there is no data loss.") 
-        return compressed #returns the encoded(results dictionary) from filecompression
+
+        return results #returns the combined dict of compress and decompress
     except FileNotFoundError as e:
         print(f"Error: {e}")
 

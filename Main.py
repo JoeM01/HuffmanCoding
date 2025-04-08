@@ -38,7 +38,7 @@ def bulkcompress(input_file, runs = 2):
     return results
 
 
-def save_results_to_csv(results, input_file = "", filename = ""):
+def save_results_to_csv(results, input_file):
     time = datetime.datetime.now().strftime("%d-%m")
     input_ext = input_file.split(".")[-1]
     filename = f"compression_outputs\\compression_results_{input_ext}_{time}.csv"
@@ -48,7 +48,7 @@ def save_results_to_csv(results, input_file = "", filename = ""):
     df.index.name = "compressor_name"
     df.reset_index(inplace=True) # Names the blank index with comp names, panda uses the keys (names) as index. 
 
-    df = df.round({"compression_ratio": 2, "compress_time": 4, "percentage_reduction": 2})
+    df = df.round({"compression_ratio": 2, "compress_time": 4, "decompress_time": 4, "percentage_reduction": 2})
     #df.to_csv(filename)
     if os.path.exists(filename):
         df.to_csv(filename, mode="a", header=False, index=False)  # Append, no header

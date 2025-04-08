@@ -44,10 +44,13 @@ def algorithm_decompress(compressed_file, decompressed_file, algorithm = None):
     with open(compressed_file, 'rb') as file:
         compressed_data = file.read()
 
+    start_time = time.time()
     decompressed_data = module.decompress(compressed_data)
+    decompress_time = time.time() - start_time
 
     with open(decompressed_file, 'wb') as file:
         file.write(decompressed_data)
+    return{'decompress_time': decompress_time,}
 
 
 
@@ -65,18 +68,20 @@ def algorithm_compressor(input_file = None, compressed_File = None, decompressed
             decompressed_file = f"compression_outputs\\{algorithm}_{file_name}_decompressed.txt"
 
         compressed = algorithm_compress(input_file, compressed_file, algorithm)
-        
+        decompressed = algorithm_decompress(compressed_file, decompressed_file, algorithm)
+
+        results = {**compressed, **decompressed}
+
         #print(f"Compressor Name: {compressed['compressor_name']}") - ignore, add name index in pandas itself
         print(f"Original Size: {compressed['original_size']} bytes")
         print(f"Compressed Size: {compressed['compressed_size']} bytes")
         print(f"Compression Ratio: {compressed['compression_ratio']:.2f}")
         print(f"Time Taken to Compress: {compressed['compress_time']:.4f} seconds")
         print(f"Percentage Reduction: {compressed['percentage_reduction']:.2f}%")
+        print(f"Decompressed! Time taken:{decompressed['decompress_time']:.4f} seconds")
 
-        decompressed = algorithm_decompress(compressed_file, decompressed_file, algorithm)
 
-        print(f"Decompressed!")
-        return compressed
+        return results
 
     except FileNotFoundError as e:
         print(f"Error {e}")
