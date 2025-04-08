@@ -3,6 +3,7 @@ import compressorsMain
 import visualizations as vs
 import pandas as pd
 import os
+import datetime
 
 
 #TO DO
@@ -19,7 +20,7 @@ def bulkcompress(input_file, runs = 2):
         "zlib": compressorsMain.algorithm_compressor, #LZ77/HUFFMAN(DEFLATE) 
         "lzma": compressorsMain.algorithm_compressor, #LZ-Markov Chain
         "bz2": compressorsMain.algorithm_compressor, #burrows wheeler, runlengthencode, movetofront, huffman
-        "gzip": compressorsMain.algorithm_compressor, # gzip, deflate
+        "gzip": compressorsMain.algorithm_compressor, # gzip, deflate - not really needed but a more modern zlib.
     }
 
     results = {}
@@ -33,11 +34,15 @@ def bulkcompress(input_file, runs = 2):
                 results[name] = compressor_func(input_file=input_file, automated=True,)
             print("-------------------------------")
                 #print(results) #debug to ensure results are stored properly
-        save_results_to_csv(results)
+        save_results_to_csv(results, input_file)
     return results
 
 
-def save_results_to_csv(results, filename="compression_outputs\\compression_results.csv"):
+def save_results_to_csv(results, input_file = "", filename = ""):
+    time = datetime.datetime.now().strftime("%d-%m")
+    input_ext = input_file.split(".")[-1]
+    filename = f"compression_outputs\\compression_results_{input_ext}_{time}.csv"
+
     df = pd.DataFrame.from_dict(results, orient="index") #construct data table
     
     df.index.name = "compressor_name"
@@ -57,7 +62,6 @@ def save_results_to_csv(results, filename="compression_outputs\\compression_resu
 
 #Indvidual Compressors with input-based file selection, and outputs of a file containing the data - For debugging individual compressors.
 def choosecompressor():
-
     choice = int(input("Select your compressor: "))
     mode = ""
 
