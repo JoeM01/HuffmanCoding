@@ -35,7 +35,7 @@ def bulkcompress(input_file, runs = 2):
             print("-------------------------------")
                 #print(results) #debug to ensure results are stored properly
         save_results_to_csv(results, input_file)
-    return results
+    return results, input_file
 
 
 def save_results_to_csv(results, input_file):
@@ -82,10 +82,7 @@ def choosecompressor():
 if __name__ == "__main__":
     
     input_file = "Datasets\\alice29.txt"
-    file_name="compression_outputs\\compression_results.csv"
-    #compressed_data = "compressed_output"
-    #decompressed_data = "decompressed_output"
-    bulkcompress(input_file)
-    #file = save_results_to_csv(results)
+    results, input_file = bulkcompress(input_file) # stores returns in these two vars
+    csvexport = save_results_to_csv(results, input_file) #csvexport stores filepath in return
 
-    vs.showgraph(file_name)
+    vs.showgraph(csvexport) #used then for visualizations
