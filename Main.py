@@ -6,7 +6,7 @@ import os
 import datetime
 
 
-def bulkcompress(input_file, runs = 5):
+def bulkcompress(input_file, runs = 1): # runs determines how many loops.
     compressors = {
         "huffman": huffman.huffman_compressor, #basic huffman coding
         "zlib": compressorsMain.algorithm_compressor, #LZ77/HUFFMAN(DEFLATE) - Built off gzip algorithm
@@ -52,7 +52,7 @@ def save_results_to_csv(results, input_file):
 
 
 
-#For debugging individual compressors.
+"""For debugging individual compressors.
 def choosecompressor():
     choice = int(input("Select your input file: "))
     mode = ""
@@ -65,15 +65,10 @@ def choosecompressor():
         mode = compressorsMain.algorithm_compressor(algorithm="lzma")
     elif (choice== 4):
         mode = compressorsMain.algorithm_compressor(algorithm="bz2")
-    return mode
-
-     
+    return mode"""
 
 
 #Runnables --
 
-    
-input_file = "dataset\\Panasonic.RW2"
-csvresults = bulkcompress(input_file) #Return results stored in var
-
-vs.showgraph(csvresults) #used then for visualizations
+input_file = "dataset\enwikivoyage-20250220-stub-meta-current.xml"
+csvresults = bulkcompress(input_file) #Store csv results in var, for potential vis use.

@@ -4,8 +4,8 @@ import os
 
 def main():
 
-    filename = 'CSV-Visualizations\compression_results_RW2_11-04.csv'  # csv path
-    dataset_type = 'RW2'
+    filename = 'dataset\enwikivoyage-20250220-stub-meta-current.xml'  # csv path
+    dataset_type = 'XML'
     save_dir = "CSV-Visualizations/"
     
     # Load the CSV file and compute average metrics
@@ -26,7 +26,7 @@ def load_csv(filename):
     return df_avg
 
 def plot_scatter_ratio_time(df, dataset_type, save_dir):
-    """Generate a scatter plot for compression ratio vs. compression time."""
+    #scatter plot for compression ratio vs. compression time.
     plt.figure(figsize=(10, 6))
     for i, row in df.iterrows():
         plt.scatter(row['compress_time'], row['compression_ratio'])
@@ -38,21 +38,9 @@ def plot_scatter_ratio_time(df, dataset_type, save_dir):
     plt.savefig(os.path.join(save_dir, f'{dataset_type}_ratio_vs_time.png'))
     plt.close()
 
-def plot_scatter_mem_time(df, dataset_type, save_dir):
-    """Generate a scatter plot for compression ratio vs. compression time."""
-    plt.figure(figsize=(10, 6))
-    for i, row in df.iterrows():
-        plt.scatter(row['memory_usage'], row['compress_time'])
-        plt.annotate(row['compressor_name'], (row['memory_usage'], row['compress_time']))
-    plt.xlabel('Compression Ratio')
-    plt.ylabel('Compress Time (seconds)')
-    plt.title(f'Memory Usage vs. Compress Time for {dataset_type.upper()} Dataset')
-    plt.tight_layout()
-    plt.savefig(os.path.join(save_dir, f'{dataset_type}_memory_usage_vs_time.png'))
-    plt.close()
 
 def plot_combined_bar_chart(df, dataset_type, save_dir):
-    """Generate a combined bar chart for compression and decompression times."""
+    #shows compress & decompress times for each algorithm for specified format
     bar_width = 0.35
     index = range(len(df))
     plt.figure(figsize=(12, 6))
