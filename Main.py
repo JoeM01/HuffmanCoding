@@ -6,7 +6,7 @@ import os
 import datetime
 
 
-def bulkcompress(input_file, runs = 1):
+def bulkcompress(input_file, runs = 5):
     compressors = {
         "huffman": huffman.huffman_compressor, #basic huffman coding
         "zlib": compressorsMain.algorithm_compressor, #LZ77/HUFFMAN(DEFLATE) - Built off gzip algorithm
@@ -21,9 +21,9 @@ def bulkcompress(input_file, runs = 1):
             print(f"RUNNING {name} COMPRESSOR... (Run {run+1})")
             print("-------------------------------")
             try:
-                results[name] = compressor_func(input_file=input_file, automated=True, algorithm=name,)
+                results[name] = compressor_func(input_file=input_file, algorithm=name,)
             except TypeError:
-                results[name] = compressor_func(input_file=input_file, automated=True,)
+                results[name] = compressor_func(input_file=input_file,)
             print("-------------------------------")
                 #print(results) #debug to ensure results are stored properly
         csv_results = save_results_to_csv(results, input_file)
@@ -73,7 +73,7 @@ def choosecompressor():
 #Runnables --
 
     
-input_file = "dataset\\enwikivoyage-20250220-stub-meta-current.xml"
+input_file = "dataset\\Panasonic.RW2"
 csvresults = bulkcompress(input_file) #Return results stored in var
 
 vs.showgraph(csvresults) #used then for visualizations

@@ -125,17 +125,13 @@ def decompress(encoded_file, output_file, root):
     return {'decompress_time':decompress_time}
 
 
-def huffman_compressor(input_file = None, compressed_File = None, decompressed_file = None, automated = False): #reworked so it can be called in other files using imports.
+def huffman_compressor(input_file = None, compressed_File = None, decompressed_file = None): #reworked so it can be called in other files using imports.
     try:
-        if not automated:
-            input_file = input("Enter the path of the input file: ")
-            compressed_file = input("Enter the path of the compressed file: ")
-            decompressed_file = input("Enter the path of the decompressed file: ")
-        if automated:
-            #input file specified in main
-            file_name = os.path.basename(input_file)
-            compressed_file = f"compression_output\\huffman_{file_name}_compressed.bin"
-            decompressed_file = f"compression_output\\huffman_{file_name}_decompressed.txt"
+
+        #input file specified in main
+        file_name = os.path.basename(input_file)
+        compressed_file = f"compression_output\\huffman_{file_name}_compressed.bin"
+        decompressed_file = f"compression_output\\huffman_{file_name}_decompressed.txt"
 
         root, compressed = compress(input_file, compressed_file) #root, compression filled from the returns in file_compression
         decompressed = decompress(compressed_file, decompressed_file, root)

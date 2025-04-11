@@ -1,26 +1,72 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
+
+def main():
+
+    filename = 'CSV-Visualizations\compression_results_RW2_11-04.csv'  # csv path
+    dataset_type = 'RW2'
+    save_dir = "CSV-Visualizations/"
+    
+    # Load the CSV file and compute average metrics
+    df_avg = load_csv(filename) 
+
+    plot_scatter_ratio_time(df_avg, dataset_type, save_dir)
+    plot_combined_bar_chart(df_avg, dataset_type, save_dir)
 
 
-def showgraph(filename):
+def load_csv(filename):
+ 
+    #Load the CSV file, combined average metrics for each comp
+    #return dataframe of average metrics
+ 
     df = pd.read_csv(filename)
-    
-    #merges compressor names into one, with all results averaged.
-    compressor_avg = df.groupby("compressor_name")[["compress_time", "percentage_reduction"]].mean()
+    # Compute average metrics for each compressor across multiple runs
+    df_avg = df.groupby('compressor_name').mean(numeric_only=True).reset_index()
+    return df_avg
 
-    plt.figure(figsize=(8, 5))
-    plt.scatter(compressor_avg["compress_time"], compressor_avg["percentage_reduction"], color="green", s=100)
+def plot_scatter_ratio_time(df, dataset_type, save_dir):
+    """Generate a scatter plot for compression ratio vs. compression time."""
+    plt.figure(figsize=(10, 6))
+    for i, row in df.iterrows():
+        plt.scatter(row['compress_time'], row['compression_ratio'])
+        plt.annotate(row['compressor_name'], (row['compress_time'], row['compression_ratio']))
+    plt.xlabel('Compress Time (seconds)')
+    plt.ylabel('Compression Ratio')
+    plt.title(f'Compression Ratio vs. Compress Time for {dataset_type.upper()} Dataset')
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_dir, f'{dataset_type}_ratio_vs_time.png'))
+    plt.close()
 
-    plt.xlabel("Compression Time (seconds)")
-    plt.ylabel("Percentage Reduction")
-    plt.title("Compression Time vs Percentage Reduction")
+def plot_scatter_mem_time(df, dataset_type, save_dir):
+    """Generate a scatter plot for compression ratio vs. compression time."""
+    plt.figure(figsize=(10, 6))
+    for i, row in df.iterrows():
+        plt.scatter(row['memory_usage'], row['compress_time'])
+        plt.annotate(row['compressor_name'], (row['memory_usage'], row['compress_time']))
+    plt.xlabel('Compression Ratio')
+    plt.ylabel('Compress Time (seconds)')
+    plt.title(f'Memory Usage vs. Compress Time for {dataset_type.upper()} Dataset')
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_dir, f'{dataset_type}_memory_usage_vs_time.png'))
+    plt.close()
 
-    # Label each point with its compressor name
+def plot_combined_bar_chart(df, dataset_type, save_dir):
+    """Generate a combined bar chart for compression and decompression times."""
+    bar_width = 0.35
+    index = range(len(df))
+    plt.figure(figsize=(12, 6))
+    plt.bar(index, df['compress_time'], bar_width, label='Compress Time')
+    plt.bar([i + bar_width for i in index], df['decompress_time'], bar_width, label='Decompress Time')
+    plt.xlabel('Compressor')
+    plt.ylabel('Time (seconds)')
+    plt.title(f'Compression and Decompression Times for {dataset_type.upper()} Dataset')
+    plt.xticks([i + bar_width / 2 for i in index], df['compressor_name'], rotation=45)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_dir, f'{dataset_type}_times.png'))
+    plt.close()
 
-    for compressor, row in compressor_avg.iterrows():
-        plt.annotate(compressor, (row["compress_time"], row["percentage_reduction"]), fontsize=10, xytext=(5,5), textcoords="offset points")
-    
-    print("from vis file below:")
-    print(compressor_avg) #testing to see avg outputs
 
-    plt.show() # if perm error, close csv file - stops from using.
+
+main()

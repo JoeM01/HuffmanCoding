@@ -60,18 +60,14 @@ def algorithm_decompress(compressed_file, decompressed_file, algorithm = None):
 
 
 
-def algorithm_compressor(input_file = None, compressed_File = None, decompressed_file = None, automated = False, algorithm = None): #to call in main
+def algorithm_compressor(input_file = None, compressed_File = None, decompressed_file = None, algorithm = None): #to call in main
     try:
 
-        if not automated:
-            input_file = input("Enter the path of the input file: ")
-            compressed_file = input("Enter the path of the compressed file: ")
-            decompressed_file = input("Enter the path of the decompressed file: ")
-        if automated:
-            #input file specified in main
-            file_name = os.path.basename(input_file)
-            compressed_file = f"compression_output\\{algorithm}_{file_name}_compressed.bin" #organising file names, utilizing album and original name
-            decompressed_file = f"compression_output\\{algorithm}_{file_name}_decompressed.txt"
+
+        #input file specified in main
+        file_name = os.path.basename(input_file)
+        compressed_file = f"compression_output\\{algorithm}_{file_name}_compressed.bin" #organising file names, utilizing algorithm and original name
+        decompressed_file = f"compression_output\\{algorithm}_{file_name}_decompressed.txt"
 
         compressed = algorithm_compress(input_file, compressed_file, algorithm)
         decompressed = algorithm_decompress(compressed_file, decompressed_file, algorithm)
