@@ -1,4 +1,4 @@
-import huffmanFinal
+import huffman
 import compressorsMain
 import visualizations as vs
 import pandas as pd
@@ -6,21 +6,13 @@ import os
 import datetime
 
 
-#TO DO
-#Make calling compressors dynamic - DONE
-#Export compression data to txt file on each run - DONE - CHANGED TO CVS, OLD METHOD IN OLD FOLDER.
-#Visualize data(?) - matplot should now work as I've made the data actually return instead of just running the func
-
-def bulkcompress(input_file, runs = 2):
+def bulkcompress(input_file, runs = 1):
     compressors = {
-        #"ZLIB": zlibcompress.zlib_compressor,
-        #"LZMA": lzmacompress.lzma_compressor,
-        #"BZ2": bz2compress.bz2_compressor,
-        "HUFFMAN": huffmanFinal.huffman_compressor, #simple, basic huffman
-        "zlib": compressorsMain.algorithm_compressor, #LZ77/HUFFMAN(DEFLATE) 
-        "lzma": compressorsMain.algorithm_compressor, #LZ-Markov Chain
-        "bz2": compressorsMain.algorithm_compressor, #burrows wheeler, runlengthencode, movetofront, huffman
-        "gzip": compressorsMain.algorithm_compressor, # gzip, deflate - not really needed but a more modern zlib.
+        "huffman": huffman.huffman_compressor, #basic huffman coding
+        "zlib": compressorsMain.algorithm_compressor, #LZ77/HUFFMAN(DEFLATE) - Built off gzip algorithm
+        "lzma": compressorsMain.algorithm_compressor, #LZ-Markov Chain - 7zip
+        "bz2": compressorsMain.algorithm_compressor, #BWT, RLE, MTF, huffman
+        "gzip": compressorsMain.algorithm_compressor, # gzip, deflate   
     }
 
     results = {}
@@ -34,14 +26,14 @@ def bulkcompress(input_file, runs = 2):
                 results[name] = compressor_func(input_file=input_file, automated=True,)
             print("-------------------------------")
                 #print(results) #debug to ensure results are stored properly
-        save_results_to_csv(results, input_file)
-    return results, input_file
+        csv_results = save_results_to_csv(results, input_file)
+    return csv_results
 
 
 def save_results_to_csv(results, input_file):
     time = datetime.datetime.now().strftime("%d-%m")
     input_ext = input_file.split(".")[-1]
-    filename = f"compression_outputs\\compression_results_{input_ext}_{time}.csv"
+    filename = f"CSV-Visualizations\\compression_results_{input_ext}_{time}.csv"
 
     df = pd.DataFrame.from_dict(results, orient="index") #construct data table
     
@@ -60,29 +52,28 @@ def save_results_to_csv(results, input_file):
 
 
 
-#Indvidual Compressors with input-based file selection, and outputs of a file containing the data - For debugging individual compressors.
+#For debugging individual compressors.
 def choosecompressor():
-    choice = int(input("Select your compressor: "))
+    choice = int(input("Select your input file: "))
     mode = ""
 
     if (choice == 1):
-        mode = huffmanFinal.huffman_compressor()
+        mode = huffman.huffman_compressor()
     elif (choice == 2):
         mode = compressorsMain.algorithm_compressor(algorithm="zlib")
     elif (choice == 3):
         mode = compressorsMain.algorithm_compressor(algorithm="lzma")
     elif (choice== 4):
-         mode = compressorsMain.algorithm_compressor(algorithm="bz2")
-    return mode,
+        mode = compressorsMain.algorithm_compressor(algorithm="bz2")
+    return mode
 
      
 
 
 #Runnables --
-if __name__ == "__main__":
-    
-    input_file = "Datasets\\alice29.txt"
-    results, input_file = bulkcompress(input_file) # stores returns in these two vars
-    csvexport = save_results_to_csv(results, input_file) #csvexport stores filepath in return
 
-    vs.showgraph(csvexport) #used then for visualizations
+    
+input_file = "Datasets\\enwikivoyage-20250220-stub-meta-current.xml"
+csvresults = bulkcompress(input_file) #Return results stored in var
+
+vs.showgraph(csvresults) #used then for visualizations

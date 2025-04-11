@@ -1,23 +1,18 @@
-import lzma
-import bz2
-import zlib
-import gzip
 import time
 import os
 import importlib
 
-
-
+#PRIMARY COMPRESSION HANDLER
 
 
 def algorithm_compress(input_file, compressed_file, algorithm = None):
-    module = importlib.import_module(algorithm)
+    module = importlib.import_module(algorithm) #importlib based off bulk compressor algorithm fields
 
     with open(input_file, 'rb') as file:
         data = file.read()
 
     start_time = time.time()
-    compressed_data = module.compress(data)
+    compressed_data = module.compress(data) #assuming compressors follow consistent syntax
     compress_time = time.time() - start_time
 
     with open(compressed_file, 'wb') as file:
@@ -49,7 +44,7 @@ def algorithm_decompress(compressed_file, decompressed_file, algorithm = None):
     decompress_time = time.time() - start_time
 
     with open(decompressed_file, 'wb') as file:
-        file.write(decompressed_data)
+        file.write(decompressed_data) #write data to file var
     return{'decompress_time': decompress_time,}
 
 
@@ -64,22 +59,20 @@ def algorithm_compressor(input_file = None, compressed_File = None, decompressed
         if automated:
             #input file specified in main
             file_name = os.path.basename(input_file)
-            compressed_file = f"compression_outputs\\{algorithm}_{file_name}_compressed.bin"
+            compressed_file = f"compression_outputs\\{algorithm}_{file_name}_compressed.bin" #organising file names, utilizing album and original name
             decompressed_file = f"compression_outputs\\{algorithm}_{file_name}_decompressed.txt"
 
         compressed = algorithm_compress(input_file, compressed_file, algorithm)
         decompressed = algorithm_decompress(compressed_file, decompressed_file, algorithm)
 
-        results = {**compressed, **decompressed}
+        results = {**compressed, **decompressed} #joins both dictionaries to utilize metric outputs of both.
 
-        #print(f"Compressor Name: {compressed['compressor_name']}") - ignore, add name index in pandas itself
         print(f"Original Size: {compressed['original_size']} bytes")
         print(f"Compressed Size: {compressed['compressed_size']} bytes")
         print(f"Compression Ratio: {compressed['compression_ratio']:.2f}")
         print(f"Time Taken to Compress: {compressed['compress_time']:.4f} seconds")
         print(f"Percentage Reduction: {compressed['percentage_reduction']:.2f}%")
         print(f"Decompressed! Time taken:{decompressed['decompress_time']:.4f} seconds")
-
 
         return results
 

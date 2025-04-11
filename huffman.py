@@ -1,26 +1,22 @@
 import time
 import os
 
-#root var is in relation to generated trees
-
-#binary_map_char stores the char and its subsequent binary code.
-#check set_binary_code for info - 
+#Root variable is the binary tree
+#binary_code_storage stores the char and its subsequent binary code, see set_binary_code func
 
 binary_code_storage = {}
-
-#This huffman algorithm is only good for text files as it handles chars, there is potential to change it for images etc, but this method does not seem effective.
 
 class Node:
     def __init__(self, freq, data, left=None, right=None):
         self.freq = freq
-        self.data = data
+        self.data = data # utilized in set_binary_code, assigned full binary code from root to leaf.
         self.left = left
         self.right = right
 
 def generate_tree(char_dict): #called in 'encode'
     prio_queue = []
     for char, freq in char_dict.items():
-        prio_queue.append(Node(freq, char, None, None)) #loops through to return tuples for each, uses char_dict from encode {'a': 5, 'b': 2} becomes [('a', 5), ('b', 2)] 
+        prio_queue.append(Node(freq, char, None, None)) #loops through to return tuples for each, uses byte_dict from encode.
         prio_queue.sort(key=lambda x: x.freq)
     
 
@@ -83,7 +79,7 @@ def read_binary_from_file(input_file):
         byte_array = bytearray(file.read())         #Stores bytes from file into bytearray, unsure if extra bytearray is needed
         return ''.join(f'{byte:08b}' for byte in byte_array) #Converts binary back into a string. {:08} - specifies pad to 8 bits, b specifies binary.
 
-def file_compression(input_file, output_file):
+def compress(input_file, output_file):
     with open(input_file, 'rb') as file:
         input_bytes = file.read() #stores file
 
@@ -97,7 +93,7 @@ def file_compression(input_file, output_file):
     compressed_size = os.path.getsize(output_file)
 
     percentage_reduction = ((original_size - compressed_size) / original_size) * 100 #should convert to percentage if formula is right
-    compression_ratio = original_size / compressed_size #basic way to get compression ratio, needs work.
+    compression_ratio = original_size / compressed_size #basic way to get compression ratio
 
     results = {
         'original_size': original_size,
@@ -109,7 +105,7 @@ def file_compression(input_file, output_file):
     #print(f"compress debug test {results}")
     return root, results #can return encoded str if needed for testing
 
-def file_decompression(encoded_file, output_file, root):
+def decompress(encoded_file, output_file, root):
     encoded_str = read_binary_from_file(encoded_file) #calls func which reads the binary and converts to string binary.
 
     start_time = time.time()
@@ -132,11 +128,11 @@ def huffman_compressor(input_file = None, compressed_File = None, decompressed_f
         if automated:
             #input file specified in main
             file_name = os.path.basename(input_file)
-            compressed_file = f"compression_outputs\huffman_{file_name}_compressed.bin"
-            decompressed_file = f"compression_outputs\huffman_{file_name}_decompressed.txt"
+            compressed_file = f"compression_outputs\\huffman_{file_name}_compressed.bin"
+            decompressed_file = f"compression_outputs\\huffman_{file_name}_decompressed.txt"
 
-        root, compressed = file_compression(input_file, compressed_file) #root, compression filled from the returns in file_compression
-        decompressed = file_decompression(compressed_file, decompressed_file, root)
+        root, compressed = compress(input_file, compressed_file) #root, compression filled from the returns in file_compression
+        decompressed = decompress(compressed_file, decompressed_file, root)
 
         results = {**compressed, **decompressed}
 
