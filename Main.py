@@ -73,7 +73,7 @@ def choosecompressor():
 #Runnables --
 
     
-input_file = "Datasets\\enwikivoyage-20250220-stub-meta-current.xml"
+input_file = "dataset\\enwikivoyage-20250220-stub-meta-current.xml"
 csvresults = bulkcompress(input_file) #Return results stored in var
 
 vs.showgraph(csvresults) #used then for visualizations

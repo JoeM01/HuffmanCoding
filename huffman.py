@@ -128,8 +128,8 @@ def huffman_compressor(input_file = None, compressed_File = None, decompressed_f
         if automated:
             #input file specified in main
             file_name = os.path.basename(input_file)
-            compressed_file = f"compression_outputs\\huffman_{file_name}_compressed.bin"
-            decompressed_file = f"compression_outputs\\huffman_{file_name}_decompressed.txt"
+            compressed_file = f"compression_output\\huffman_{file_name}_compressed.bin"
+            decompressed_file = f"compression_output\\huffman_{file_name}_decompressed.txt"
 
         root, compressed = compress(input_file, compressed_file) #root, compression filled from the returns in file_compression
         decompressed = decompress(compressed_file, decompressed_file, root)
