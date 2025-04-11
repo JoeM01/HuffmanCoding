@@ -1,11 +1,12 @@
 import time
 import os
+import psutil
 
 #Root variable is the binary tree
 #binary_code_storage stores the char and its subsequent binary code, see set_binary_code func
 
 binary_code_storage = {}
-
+process = psutil.Process(os.getpid())
 class Node:
     def __init__(self, freq, data, left=None, right=None):
         self.freq = freq
@@ -83,10 +84,13 @@ def compress(input_file, output_file):
     with open(input_file, 'rb') as file:
         input_bytes = file.read() #stores file
 
+    mem_before = process.memory_info().rss
+
     start_time = time.time()
     encoded_str, root = encode(input_bytes) #calls encode using input_str, returns values into enc_str, root.
     compress_time = time.time() - start_time
 
+    mem_after = process.memory_info().rss
     write_binary_to_file(encoded_str, output_file) #calls wbtf func, stores encoded binary str into output file as proper binary.
 
     original_size = os.path.getsize(input_file) #os import to get sizes for comparison
@@ -94,13 +98,15 @@ def compress(input_file, output_file):
 
     percentage_reduction = ((original_size - compressed_size) / original_size) * 100 #should convert to percentage if formula is right
     compression_ratio = original_size / compressed_size #basic way to get compression ratio
+    mem_use = (mem_after - mem_before) / 1024
 
     results = {
         'original_size': original_size,
         'compressed_size': compressed_size,
         'compression_ratio': compression_ratio,
         'compress_time': compress_time,
-        'percentage_reduction': percentage_reduction
+        'percentage_reduction': percentage_reduction,
+        'memory_usage': mem_use,
     }
     #print(f"compress debug test {results}")
     return root, results #can return encoded str if needed for testing
@@ -140,8 +146,10 @@ def huffman_compressor(input_file = None, compressed_File = None, decompressed_f
         print(f"Compressed Size: {compressed['compressed_size']} bytes")
         print(f"Compression Ratio: {compressed['compression_ratio']:.2f}")
         print(f"Time Taken to Compress: {compressed['compress_time']:.4f} seconds")
+        print(f"Time Taken to Decompress: {decompressed['decompress_time']:.4f} seconds")
         print(f"Percentage Reduction: {compressed['percentage_reduction']:.2f}%")
-        print(f"Decompressed! Time taken:{decompressed['decompress_time']:.4f} seconds")
+        print(f"Memory Usage: {compressed['memory_usage']:.2f} KiB")
+        
 
 
         return results #returns the combined dict of compress and decompress
